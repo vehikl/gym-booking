@@ -1,4 +1,5 @@
 import Day from './Day'
+import AddBooking from './AddBooking'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 
@@ -25,26 +26,29 @@ function App() {
   // use the number of days before offset to offset the grid
 
   return (
-    <div className="month flex flex-col items-center justify-center h-screen">
-      <h1>{selectedMonth.format('MMMM YYYY')}</h1>
-      <div className='flex flex-row'>
-        <button className='p-3' onClick={subtractMonth}>Previous month</button>
-        <button className='p-3' onClick={goToCurrentMonth}>Now</button>
-        <button className='p-3' onClick={addMonth}>Next month</button>
-      </div>
-      
-      <div className="week grid grid-cols-7 gap-3 w-3/4">
-        {daysOfTheWeeks.map(day => (
-            <div>{day}</div>
-        ))}
+    <>
+      <div className="month flex flex-col items-center justify-center h-screen">
+        <h1>{selectedMonth.format('MMMM YYYY')}</h1>
+        <div className='flex flex-row'>
+          <button className='p-3' onClick={subtractMonth}>Previous month</button>
+          <button className='p-3' onClick={goToCurrentMonth}>Now</button>
+          <button className='p-3' onClick={addMonth}>Next month</button>
+        </div>
+        
+        <div className="week grid grid-cols-7 gap-3 w-3/4">
+          {daysOfTheWeeks.map(day => (
+              <div>{day}</div>
+          ))}
 
-        {days.map((day, index) => {
-            if (index === 0) return <Day className={`col-start-${startDay}`} key={day} day={day} />
-    
-            return <Day key={day} day={day} />
-        })}   
+          {days.map((day, index) => {
+              if (index === 0) return <Day className={`col-start-${startDay}`} key={day} day={day} />
+      
+              return <Day key={day} day={day} />
+          })}   
+        </div>
       </div>
-    </div>
+      <AddBooking visible={true} />
+    </>
   );
 }
 
