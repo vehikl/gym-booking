@@ -5,6 +5,8 @@ import { useState } from 'react'
 
 function App() {
   const [monthOffset, setMonthOffset] = useState(0)
+  const [selectedDay, setSelectedDay] = useState()
+  const [showModal, setShowModal] = useState(false)
 
   const selectedMonth = dayjs().add(monthOffset, 'M')
 
@@ -15,8 +17,6 @@ function App() {
   const subtractMonth = () => setMonthOffset(monthOffset - 1)
   const goToCurrentMonth = () => setMonthOffset(0)
   const startDay = parseInt(selectedMonth.startOf('month').format('d')) + 1
-  console.log({ startDay })
-  console.log({ startDay: dayjs().format('dddd') })
 
   // get current day of the week (Mon, Tues, Wed, ...)
   // figure out it's offset (0, 1, 2, ...)
@@ -41,13 +41,28 @@ function App() {
           ))}
 
           {days.map((day, index) => {
-              if (index === 0) return <Day className={`col-start-${startDay}`} key={day} day={day} />
-      
-              return <Day key={day} day={day} />
+              return <Day 
+                className={index === 0 ? `col-start-${startDay}` : ""}
+                key={day} 
+                day={day} 
+                onAddBooking={()=> {
+                  // toggle modal
+                  setShowModal(true)
+                  setSelectedDay(day)
+                }}
+              />
           })}   
         </div>
       </div>
-      <AddBooking visible={true} />
+      <AddBooking
+        visible={showModal}
+        date={selectedMonth.date(selectedDay)}
+        onSubmit={({name, bookedTime}) => {
+          setShowModal(false);
+          console.log(bookedTime);
+        }}
+        onCancel={() => setShowModal(false)}
+      />
     </>
   );
 }
