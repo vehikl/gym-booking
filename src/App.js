@@ -1,7 +1,20 @@
-import Day from './Day'
-import AddBooking from './AddBooking'
+import Day from './Components/Day'
+import AddBooking from './Components/AddBooking'
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAOE9Y9NZShzcbF1huCMPCaNMK9lQAS0dM",
+  authDomain: "gym-booking-ef593.firebaseapp.com",
+  projectId: "gym-booking-ef593",
+  storageBucket: "gym-booking-ef593.appspot.com",
+  messagingSenderId: "351559060650",
+  appId: "1:351559060650:web:9c9359d148cb5248ec14d3"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+
 
 function App() {
   const [monthOffset, setMonthOffset] = useState(0)
@@ -37,7 +50,7 @@ function App() {
         
         <div className="week grid grid-cols-7 gap-3 w-3/4">
           {daysOfTheWeeks.map(day => (
-              <div>{day}</div>
+              <div key={day}>{day}</div>
           ))}
 
           {days.map((day, index) => {
@@ -46,7 +59,6 @@ function App() {
                 key={day} 
                 day={day} 
                 onAddBooking={()=> {
-                  // toggle modal
                   setShowModal(true)
                   setSelectedDay(day)
                 }}
@@ -57,9 +69,13 @@ function App() {
       <AddBooking
         visible={showModal}
         date={selectedMonth.date(selectedDay)}
-        onSubmit={({name, bookedTime}) => {
+        onSubmit={({ name, startTime, endTime }) => {
           setShowModal(false);
-          console.log(bookedTime);
+
+          const date = selectedMonth.date(selectedDay).format('MMM, D, YYYY')
+          console.log({ date, name, startTime, endTime });
+
+          // 
         }}
         onCancel={() => setShowModal(false)}
       />
