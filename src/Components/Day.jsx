@@ -1,6 +1,6 @@
 import cn from 'classnames'
 
-function Day({ className, day, onAddBooking }) {
+function Day({ className, day, onAddBooking, bookings }) {
     return (
         <div className={cn(className = '', 'day border p-2 relative')}>
             <div className="flex flex-row justify-between">

@@ -1,7 +1,7 @@
 import Day from './Components/Day'
 import AddBooking from './Components/AddBooking'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import firebase from 'firebase';
 
 const firebaseConfig = {
@@ -14,14 +14,31 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(app);
 
 
 function App() {
   const [monthOffset, setMonthOffset] = useState(0)
   const [selectedDay, setSelectedDay] = useState()
   const [showModal, setShowModal] = useState(false)
+  const [bookingsForMonth, setBookingsForMonth] = useState([])
 
-  const selectedMonth = dayjs().add(monthOffset, 'M')
+  console.log("I'm running")
+
+  const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    // const snap = await db
+    //   .collection('booking')
+    //   .where('month', '==', selectedMonth.month())
+    //   .get();
+    // console.log(snap.docs.map(doc => doc.data()))
+    // setBookingsForMonth(snap.docs.map(doc => doc.data()))
+    console.log("hello")
+    setBookingsForMonth([])
+  }, [selectedMonth])
+
 
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
   const daysOfTheWeeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -57,7 +74,8 @@ function App() {
               return <Day 
                 className={index === 0 ? `col-start-${startDay}` : ""}
                 key={day} 
-                day={day} 
+                day={day}
+                bookings={bookingsForMonth.filter(booking => booking.day === day)}
                 onAddBooking={()=> {
                   setShowModal(true)
                   setSelectedDay(day)
@@ -71,11 +89,8 @@ function App() {
         date={selectedMonth.date(selectedDay)}
         onSubmit={({ name, startTime, endTime }) => {
           setShowModal(false);
-
-          const date = selectedMonth.date(selectedDay).format('MMM, D, YYYY')
-          console.log({ date, name, startTime, endTime });
-
-          // 
+          console.log('New booking saved');
+          db.collection('booking').add({  year: selectedMonth.year(), month: selectedMonth.month(), day: selectedDay, name, startTime, endTime })
         }}
         onCancel={() => setShowModal(false)}
       />
