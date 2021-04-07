@@ -27,17 +27,17 @@ function App() {
 
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    // const snap = await db
-    //   .collection('booking')
-    //   .where('month', '==', selectedMonth.month())
-    //   .get();
-    // console.log(snap.docs.map(doc => doc.data()))
-    // setBookingsForMonth(snap.docs.map(doc => doc.data()))
-    console.log("hello")
-    setBookingsForMonth([])
-  }, [selectedMonth])
+  useEffect(() => {
+    (async () => {
+      const snap = await db
+      .collection('booking')
+      .where('month', '==', selectedMonth.month())
+      .get();
+
+      console.log(snap.docs.map(doc => doc.data()))
+      setBookingsForMonth(snap.docs.map(doc => doc.data()))
+    })()
+  }, [selectedMonth, setBookingsForMonth])
 
 
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
@@ -65,7 +65,7 @@ function App() {
           <button className='p-3' onClick={addMonth}>Next month</button>
         </div>
         
-        <div className="week grid grid-cols-7 gap-3 w-3/4">
+        <div className="week grid grid-cols-7 gap-3 w-full px-8">
           {daysOfTheWeeks.map(day => (
               <div key={day}>{day}</div>
           ))}
