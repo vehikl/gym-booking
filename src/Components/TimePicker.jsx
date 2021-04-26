@@ -7,17 +7,20 @@ const PERIODS = ['AM', 'PM']
 
 const TimePicker = ({ label, value, onChange }) => {
     return (
-    <label>{label}:
-        <select value={value.hour} onChange={(e) => onChange({ ...value, hour: e.target.value })}>
-        { HOUR_OPTIONS.map((hour) => <option key={hour} value={hour}>{hour}</option>)}
-        </select>
-        <select value={value.minute} onChange={(e) => onChange({ ...value, minute: e.target.value })}>
-        { MINUTE_OPTIONS.map((minute) => <option key={minute} value={minute}>{minute}</option>)}
-        </select>
-        <select value={value.period} onChange={(e) => onChange({ ...value, period: e.target.value })}>
-        { PERIODS.map((option) => <option key={option} value={option}>{option}</option>)}
-        </select>
-    </label>    
+    <div className="flex justify-between items-center">
+    <label>{label}:</label>
+        <div>
+            <select value={value.hour} onChange={(e) => onChange({ ...value, hour: e.target.value })}>
+            { HOUR_OPTIONS.map((hour) => <option key={hour} value={hour}>{hour}</option>)}
+            </select>
+            <select value={value.minute} onChange={(e) => onChange({ ...value, minute: e.target.value })}>
+            { MINUTE_OPTIONS.map((minute) => <option key={minute} value={minute}>{minute}</option>)}
+            </select>
+            <select value={value.period} onChange={(e) => onChange({ ...value, period: e.target.value })}>
+            { PERIODS.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>  
+        </div>
+    </div> 
     )
 }
 

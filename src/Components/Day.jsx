@@ -1,10 +1,11 @@
 import cn from 'classnames'
 
 function Timeslot({ booking }) {
+    const minute = booking.startTime.minute.padStart(2, '0')
 return (
         <div className='whitespace-nowrap flex items-center min-w-0 font-semibold text-gray-700 text-sm'>
             <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-            <span className="">{booking.startTime.hour}:{booking.startTime.minute} {booking.startTime.period}</span>
+            <span className="">{booking.startTime.hour}:{minute} {booking.startTime.period}</span>
             <span className="mx-1">-</span>
             <span className="">{booking.name}</span>
         </div>
