@@ -3,6 +3,8 @@ import AddBooking from './Components/AddBooking'
 import dayjs from 'dayjs'
 import { useState, useEffect, useMemo } from 'react'
 import firebase from 'firebase';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAOE9Y9NZShzcbF1huCMPCaNMK9lQAS0dM",
@@ -94,6 +96,7 @@ function App() {
         }}
         onCancel={() => setShowModal(false)}
       />
+      <ToastContainer />
     </>
   );
 }

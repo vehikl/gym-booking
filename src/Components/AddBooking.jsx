@@ -1,6 +1,7 @@
 import { useState } from "react"
 import TimePicker from './TimePicker'
 import { XIcon } from '@heroicons/react/solid'
+import { toast } from 'react-toastify';
 
 function AddBooking({ visible, date, onSubmit, onCancel }) {
   const [name, setName] = useState('')
@@ -14,6 +15,18 @@ function AddBooking({ visible, date, onSubmit, onCancel }) {
 
   const handleOnSubmit = (e) => {
     e.preventDefault()
+    
+    const startHour = parseInt(startTime.hour)
+    const endHour = parseInt(endTime.hour)
+
+    const startValue = new Date(0, 0, 0, startTime.period === 'AM' ? startHour: startHour + 12, parseInt(startTime.minute))
+    const endValue = new Date(0, 0, 0, endTime.period === 'AM' ? endHour: endHour + 12, parseInt(endTime.minute))
+
+    if(startValue > endValue){
+      toast.error('Start time cannot be after end time')
+    }
+
+    return; 
     onSubmit({ name, startTime, endTime })
   }
 
@@ -46,7 +59,7 @@ function AddBooking({ visible, date, onSubmit, onCancel }) {
           </div>
           <button 
             onClick={handleOnSubmit}
-            className="p-3 my-3 border border-gray-500 rounded"
+            className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
           >Submit</button>
         </form>
       </div>
