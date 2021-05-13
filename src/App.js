@@ -25,9 +25,14 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [bookingsForMonth, setBookingsForMonth] = useState([])
 
-  console.log("I'm running")
-
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
+
+  const startOfMonth = dayjs().startOf('month')
+  const daysInMonth = startOfMonth.daysInMonth();
+  const tacos = (new Array(daysInMonth)).map((_, index) => {
+    return startOfMonth.clone().add(index, 'days')
+  })
+  console.log(tacos)
 
   useEffect(() => {
     (async () => {
@@ -77,6 +82,7 @@ function App() {
                 className={index === 0 ? `col-start-${startDay}` : ""}
                 key={day} 
                 day={day}
+                selectedMonth={selectedMonth}
                 bookings={bookingsForMonth.filter(booking => booking.day === day)}
                 onAddBooking={()=> {
                   setShowModal(true)

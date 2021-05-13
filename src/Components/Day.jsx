@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import { PlusIcon } from '@heroicons/react/solid'
 
 function Timeslot({ booking }) {
     const minute = booking.startTime.minute.padStart(2, '0')
@@ -12,14 +13,19 @@ return (
     )
 }
 
-function Day({ className, day, onAddBooking, bookings }) {
-    const classes = cn(className = '', 'day border p-2 relative h-32 overflow-y-auto')
+function Day({ className, day, onAddBooking, bookings, selectedMonth }) {
+    const classes = cn(className, 'day border p-2 relative h-32 overflow-y-auto')
+
+    
 
     return (
         <div className={classes}>
             <div className="flex flex-row justify-between">
-                <div className="text-base">{day}</div>
-                <button onClick={() => onAddBooking()}>+</button>
+                {/* TODO: responsive day name */}
+                <div className="text-base">{selectedMonth.date(day).format('ddd MMM D, YYYY')}</div>
+                <button onClick={() => onAddBooking()}>                
+                    <PlusIcon className="h-6 w-6" />
+                </button>
             </div>
             { bookings.map((booking, index) =>  <Timeslot key={index} booking={booking} />) }
         </div>
