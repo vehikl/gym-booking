@@ -27,13 +27,6 @@ function App() {
 
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
 
-  const startOfMonth = dayjs().startOf('month')
-  const daysInMonth = startOfMonth.daysInMonth();
-  const tacos = (new Array(daysInMonth)).map((_, index) => {
-    return startOfMonth.clone().add(index, 'days')
-  })
-  console.log(tacos)
-
   useEffect(() => {
     (async () => {
       const snap = await db
@@ -54,13 +47,6 @@ function App() {
   const subtractMonth = () => setMonthOffset(monthOffset - 1)
   const goToCurrentMonth = () => setMonthOffset(0)
   const startDay = parseInt(selectedMonth.startOf('month').format('d')) + 1
-
-  // get current day of the week (Mon, Tues, Wed, ...)
-  // figure out it's offset (0, 1, 2, ...)
-
-
-  // get the number of days before the offset
-  // use the number of days before offset to offset the grid
 
   return (
     <>
