@@ -57,9 +57,9 @@ function App() {
           <button className='p-3' onClick={addMonth}>Next month</button>
         </div>
         
-        <div className="week grid grid-cols-7 gap-3 w-full px-8">
+        <div className="md:grid md:grid-cols-7 md:gap-3 w-full px-8">
           {daysOfTheWeeks.map(day => (
-              <div key={day}>{day}</div>
+            <div className="hidden md:block" key={day}>{day}</div>
           ))}
 
           {days.map((day, index) => {
