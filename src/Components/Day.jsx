@@ -21,7 +21,6 @@ function Day({ className, day, onAddBooking, bookings, selectedMonth }) {
     return (
         <div className={classes}>
             <div className="flex flex-row justify-between">
-                {/* TODO: responsive day name */}
                 <div className="hidden md:block text-base">{selectedMonth.date(day).format('D')}</div>
                 <div className="md:hidden text-base">{selectedMonth.date(day).format('ddd MMM D, YYYY')}</div>
                 <button onClick={() => onAddBooking()}>                

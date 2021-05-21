@@ -50,7 +50,7 @@ function App() {
   return (
     <>
       <div className="month flex flex-col items-center justify-center h-full">
-        <h1>{selectedMonth.format('MMMM YYYY')}</h1>
+        <h1 className='mt-4'>{selectedMonth.format('MMMM YYYY')}</h1>
         <div className='flex flex-row'>
           <button className='p-3' onClick={subtractMonth}>Previous month</button>
           <button className='p-3' onClick={goToCurrentMonth}>Now</button>
