@@ -34,7 +34,6 @@ function App() {
       .where('month', '==', selectedMonth.month())
       .get();
 
-      console.log(snap.docs.map(doc => doc.data()))
       setBookingsForMonth(snap.docs.map(doc => doc.data()))
     })()
   }, [selectedMonth, setBookingsForMonth])
@@ -50,7 +49,7 @@ function App() {
 
   return (
     <>
-      <div className="month flex flex-col items-center justify-center h-screen">
+      <div className="month flex flex-col items-center justify-center h-full">
         <h1>{selectedMonth.format('MMMM YYYY')}</h1>
         <div className='flex flex-row'>
           <button className='p-3' onClick={subtractMonth}>Previous month</button>
