@@ -17,7 +17,6 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
-const db = firebase.firestore(app);
 
 const uiConfig = {
   callbacks: {
@@ -43,7 +42,7 @@ ui.start('#firebaseui-auth-container', uiConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App db={db} />
+    <App app={app} />
   </React.StrictMode>,
   document.getElementById('root')
 );

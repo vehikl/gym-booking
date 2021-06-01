@@ -7,7 +7,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import firebase from 'firebase';
 
-function App({ db }) {
+
+
+function App({ app }) {
   const [monthOffset, setMonthOffset] = useState(0)
   const [selectedDay, setSelectedDay] = useState()
   const [showModal, setShowModal] = useState(false)
@@ -15,6 +17,8 @@ function App({ db }) {
   const [user, setUser] = useState(null)
 
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
+
+  const db = firebase.firestore(app); // TODO: db is stale? :(
 
   useEffect(() => {
     (async () => {
@@ -33,6 +37,11 @@ function App({ db }) {
     })
   }, [])
 
+  const logout = async () => {
+    await firebase.auth().signOut()
+    window.location.reload()
+  }
+
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
   const daysOfTheWeeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -45,6 +54,10 @@ function App({ db }) {
 
   return (
     <>
+      <div className="fixed right-0 top-0 mr-2 mt-2">
+        {user.displayName}
+        <button className="ml-2" onClick={logout}>Logout</button>
+      </div>
       <div className="month flex flex-col items-center justify-center h-full">
         <h1 className='mt-4'>{selectedMonth.format('MMMM YYYY')}</h1>
         <div className='flex flex-row'>

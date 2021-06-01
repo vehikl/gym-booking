@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import { CheckCircleIcon, PlusIcon } from '@heroicons/react/solid'
+import { PlusIcon } from '@heroicons/react/solid'
 
 function Timeslot({ booking }) {
     const minute = booking.startTime.minute.padStart(2, '0')
@@ -9,6 +9,7 @@ return (
             <span className="">{booking.startTime.hour}:{minute} {booking.startTime.period}</span>
             <span className="mx-1">-</span>
             <span className="">{booking.name}</span>
+            <button className="ml-1"> Delete </button>
         </div>
     )
 }

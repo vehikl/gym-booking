@@ -4,7 +4,6 @@ import { XIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify';
 
 function AddBooking({ visible, date, onSubmit, onCancel, user }) {
-  const [name, setName] = useState('')
   const [startTime, setStartTime] = useState({hour: '1', minute: '0', period: 'AM'})
   const [endTime, setEndTime] = useState({hour: '1', minute: '0', period: 'AM'})
 
@@ -28,8 +27,7 @@ function AddBooking({ visible, date, onSubmit, onCancel, user }) {
       toast.error('Start time cannot be after end time')
     }
 
-    return; 
-    onSubmit({ name, startTime, endTime })
+    onSubmit({ name: user.displayName, startTime, endTime })
   }
 
   return visible ? (
