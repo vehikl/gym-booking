@@ -10,25 +10,23 @@ import firebase from 'firebase';
 function App({ db }) {
   const [monthOffset, setMonthOffset] = useState(0)
   const [selectedDay, setSelectedDay] = useState()
-  const [updateDB, setUpdateDB] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [bookingsForMonth, setBookingsForMonth] = useState([])
   const [user, setUser] = useState(null)
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
 
   useEffect(() => {
-    (async () => {
-      console.log('db: ', db)
-      const bookings = await db
-      .collection('booking')
-      .where('month', '==', selectedMonth.month())
-      .get();
-
-      setUpdateDB(false)
-
+    db.collection('booking').onSnapshot((bookings) => {
+      console.log('store has updated')
+      // TODO: filter to show only current month's bookings
+      //  db
+      //   .collection('booking')
+      //   .on
+      //   .where('month', '==', selectedMonth.month())
+      //   .get();
       setBookingsForMonth(bookings.docs.map(doc => doc.data()))
-    })()
-  }, [db, selectedMonth, setBookingsForMonth, updateDB, setUpdateDB])
+    })
+  }, [])
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -44,9 +42,8 @@ function App({ db }) {
   const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => {
     return ({ name, startTime, endTime, }) => {
       setShowModal(false)
-      console.log('New booking saved')
       db.collection('booking').add({ year: selectedMonth.year(), month: selectedMonth.month(), day: selectedDay, name, startTime, endTime })
-      setUpdateDB(true)
+      console.log('New booking saved')
     }
   }
   
