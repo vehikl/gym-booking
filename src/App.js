@@ -7,29 +7,28 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import firebase from 'firebase';
 
-
-
-function App({ app }) {
+function App({ db }) {
   const [monthOffset, setMonthOffset] = useState(0)
   const [selectedDay, setSelectedDay] = useState()
+  const [updateDB, setUpdateDB] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [bookingsForMonth, setBookingsForMonth] = useState([])
   const [user, setUser] = useState(null)
-
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
-
-  const db = firebase.firestore(app); // TODO: db is stale? :(
 
   useEffect(() => {
     (async () => {
-      const snap = await db
+      console.log('db: ', db)
+      const bookings = await db
       .collection('booking')
       .where('month', '==', selectedMonth.month())
       .get();
 
-      setBookingsForMonth(snap.docs.map(doc => doc.data()))
+      setUpdateDB(false)
+
+      setBookingsForMonth(bookings.docs.map(doc => doc.data()))
     })()
-  }, [db, selectedMonth, setBookingsForMonth])
+  }, [db, selectedMonth, setBookingsForMonth, updateDB, setUpdateDB])
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -42,6 +41,15 @@ function App({ app }) {
     window.location.reload()
   }
 
+  const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => {
+    return ({ name, startTime, endTime, }) => {
+      setShowModal(false)
+      console.log('New booking saved')
+      db.collection('booking').add({ year: selectedMonth.year(), month: selectedMonth.month(), day: selectedDay, name, startTime, endTime })
+      setUpdateDB(true)
+    }
+  }
+  
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
   const daysOfTheWeeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -90,11 +98,7 @@ function App({ app }) {
         visible={showModal}
         date={selectedMonth.date(selectedDay)}
         user={user}
-        onSubmit={({ name, startTime, endTime, }) => {
-          setShowModal(false);
-          console.log('New booking saved');
-          db.collection('booking').add({  year: selectedMonth.year(), month: selectedMonth.month(), day: selectedDay, name, startTime, endTime })
-        }}
+        onSubmit={handleSubmit(setShowModal, db, selectedMonth, selectedDay)}
         onCancel={() => setShowModal(false)}
       />
       <ToastContainer />

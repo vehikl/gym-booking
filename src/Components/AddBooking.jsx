@@ -25,6 +25,7 @@ function AddBooking({ visible, date, onSubmit, onCancel, user }) {
 
     if(startValue > endValue){
       toast.error('Start time cannot be after end time')
+      return;
     }
 
     onSubmit({ name: user.displayName, startTime, endTime })

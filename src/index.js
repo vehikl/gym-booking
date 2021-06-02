@@ -17,6 +17,7 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
+const db = firebase.firestore(app); // TODO: db is stale? :(
 
 const uiConfig = {
   callbacks: {
@@ -42,7 +43,7 @@ ui.start('#firebaseui-auth-container', uiConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App app={app} />
+    <App db={db}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
