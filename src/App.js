@@ -11,26 +11,29 @@ function App({ db }) {
   const [monthOffset, setMonthOffset] = useState(0)
   const [selectedDay, setSelectedDay] = useState()
   const [showModal, setShowModal] = useState(false)
+  const [editingBooking, setEditingBooking] = useState(false)
   const [bookingsForMonth, setBookingsForMonth] = useState([])
   const [user, setUser] = useState(null)
+  const [selectedTimeslotId, setSelectedTimeslotId] = useState()
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
 
   useEffect(() => {
-    db.collection('booking').onSnapshot((bookings) => {
-      console.log('store has updated')
-      // TODO: filter to show only current month's bookings
-      //  db
-      //   .collection('booking')
-      //   .on
-      //   .where('month', '==', selectedMonth.month())
-      //   .get();
-      setBookingsForMonth(bookings.docs.map(doc => doc.data()))
+    db.collection('booking')
+      .where('month', '==', selectedMonth.month())
+      .onSnapshot((bookings) => {
+      setBookingsForMonth(bookings.docs.map(doc => {
+        return {
+          ...doc.data(),
+          id: doc.id
+        }
+      }))
     })
   }, [])
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
+      console.log({user})
     })
   }, [])
 
@@ -42,9 +45,23 @@ function App({ db }) {
   const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => {
     return ({ name, startTime, endTime, }) => {
       setShowModal(false)
-      db.collection('booking').add({ year: selectedMonth.year(), month: selectedMonth.month(), day: selectedDay, name, startTime, endTime })
+      db.collection('booking').add({
+        year: selectedMonth.year(),
+        month: selectedMonth.month(),
+        day: selectedDay,
+        name,
+        startTime,
+        endTime,
+        userId: user.uid
+      })
       console.log('New booking saved')
     }
+  }
+
+  const handleDelete = () => {
+    setShowModal(false)
+    db.collection('booking').doc(selectedTimeslotId).delete()
+    console.log('Booking deleted')
   }
   
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
@@ -59,9 +76,9 @@ function App({ db }) {
 
   return (
     <>
-      <div className="fixed right-0 top-0 mr-2 mt-2">
-        {user.displayName}
-        <button className="ml-2" onClick={logout}>Logout</button>
+      <div className="fixed right-0 top-0 mr-8 mt-2">
+        <span className="text-gray-500">{user.displayName}</span>
+        <button className="ml-2 py-1 px-2 border" onClick={logout}>Logout</button>
       </div>
       <div className="month flex flex-col items-center justify-center h-full">
         <h1 className='mt-4'>{selectedMonth.format('MMMM YYYY')}</h1>
@@ -83,19 +100,25 @@ function App({ db }) {
                 day={day}
                 selectedMonth={selectedMonth}
                 bookings={bookingsForMonth.filter(booking => booking.day === day)}
-                onAddBooking={()=> {
+                onAddBooking={({ editing, id })=> {
                   setShowModal(true)
                   setSelectedDay(day)
+                  if (editing) {
+                    setEditingBooking(true)
+                    setSelectedTimeslotId(id)
+                  }
                 }}
               />
           })}   
         </div>
       </div>
       <AddBooking
+        editingBooking={editingBooking}
         visible={showModal}
         date={selectedMonth.date(selectedDay)}
         user={user}
         onSubmit={handleSubmit(setShowModal, db, selectedMonth, selectedDay)}
+        onDelete={() => handleDelete()}
         onCancel={() => setShowModal(false)}
       />
       <ToastContainer />

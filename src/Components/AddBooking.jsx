@@ -3,7 +3,7 @@ import TimePicker from './TimePicker'
 import { XIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify';
 
-function AddBooking({ visible, date, onSubmit, onCancel, user }) {
+function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, onDelete }) {
   const [startTime, setStartTime] = useState({hour: '1', minute: '0', period: 'AM'})
   const [endTime, setEndTime] = useState({hour: '1', minute: '0', period: 'AM'})
 
@@ -29,6 +29,11 @@ function AddBooking({ visible, date, onSubmit, onCancel, user }) {
     }
 
     onSubmit({ name: user.displayName, startTime, endTime })
+  }
+
+  const handleOnDelete = (e) => {
+    e.preventDefault()
+    onDelete()
   }
 
   return visible ? (
@@ -67,6 +72,12 @@ function AddBooking({ visible, date, onSubmit, onCancel, user }) {
             onClick={handleOnSubmit}
             className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
           >Submit</button>
+          {editingBooking && (
+            <button 
+            onClick={handleOnDelete}
+            className="p-3 mt-4 text-white rounded font-semibold bg-red-500 hover:bg-red-400"
+          >Delete</button>
+          )}
         </form>
       </div>
     </div>
