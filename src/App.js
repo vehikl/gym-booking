@@ -14,7 +14,7 @@ function App({ db }) {
   const [editingBooking, setEditingBooking] = useState(false)
   const [bookingsForMonth, setBookingsForMonth] = useState([])
   const [user, setUser] = useState(null)
-  const [selectedTimeslotId, setSelectedTimeslotId] = useState()
+  const [selectedTimeslot, setSelectedTimeslot] = useState({})
   const selectedMonth = useMemo(() => dayjs().add(monthOffset, 'M'), [monthOffset])
 
   useEffect(() => {
@@ -45,6 +45,8 @@ function App({ db }) {
   const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => {
     return ({ name, startTime, endTime, }) => {
       setShowModal(false)
+      setSelectedTimeslot({})
+      setEditingBooking(false)
       db.collection('booking').add({
         year: selectedMonth.year(),
         month: selectedMonth.month(),
@@ -60,10 +62,12 @@ function App({ db }) {
 
   const handleDelete = () => {
     setShowModal(false)
-    db.collection('booking').doc(selectedTimeslotId).delete()
+    setSelectedTimeslot({})
+    setEditingBooking(false)
+    db.collection('booking').doc(selectedTimeslot.id).delete()
     console.log('Booking deleted')
   }
-  
+
   const days = Array.from({length: selectedMonth.daysInMonth()}, (_, index) => ++index)
   const daysOfTheWeeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -100,12 +104,12 @@ function App({ db }) {
                 day={day}
                 selectedMonth={selectedMonth}
                 bookings={bookingsForMonth.filter(booking => booking.day === day)}
-                onAddBooking={({ editing, id })=> {
+                onAddBooking={({ editing, booking })=> {
                   setShowModal(true)
                   setSelectedDay(day)
                   if (editing) {
                     setEditingBooking(true)
-                    setSelectedTimeslotId(id)
+                    setSelectedTimeslot(booking)
                   }
                 }}
               />
@@ -115,11 +119,16 @@ function App({ db }) {
       <AddBooking
         editingBooking={editingBooking}
         visible={showModal}
+        selectedTimeslot={selectedTimeslot}
         date={selectedMonth.date(selectedDay)}
         user={user}
         onSubmit={handleSubmit(setShowModal, db, selectedMonth, selectedDay)}
         onDelete={() => handleDelete()}
-        onCancel={() => setShowModal(false)}
+        onCancel={() => {
+          setShowModal(false)
+          setSelectedTimeslot({})
+          setEditingBooking(false)
+        }}
       />
       <ToastContainer />
     </>

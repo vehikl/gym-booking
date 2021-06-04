@@ -3,7 +3,7 @@ import TimePicker from './TimePicker'
 import { XIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify';
 
-function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, onDelete }) {
+function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, onDelete, selectedTimeslot }) {
   const [startTime, setStartTime] = useState({hour: '1', minute: '0', period: 'AM'})
   const [endTime, setEndTime] = useState({hour: '1', minute: '0', period: 'AM'})
 
@@ -36,25 +36,35 @@ function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, o
     onDelete()
   }
 
+  const heading = () => {
+    console.log('userId', user.uid)
+    console.log('selectedTimeslot.userId', selectedTimeslot.userId)
+    console.log(editingBooking)
+
+    if (editingBooking) {
+      if (user.uid === selectedTimeslot.userId) {
+        return 'Edit booking'
+      }
+      return 'Booking'
+    }
+    return 'Add booking'
+  }
+
   return visible ? (
     <div className="h-screen w-screen absolute bg-gray-200 bg-opacity-40 inset-0 flex justify-center items-center">
       <div className="bg-white rounded shadow p-5 flex flex-col w-2/3 max-w-md">
         <div className="flex flex-row items-center justify-between mb-4">
           <div className="flex flex-col w-full">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="font-bold text-gray-800 text-lg">Add booking</h1>
-
+                <h1 className="font-bold text-gray-800 text-lg">{heading()}</h1>
                 <button onClick={onCancel} className="text-sm text-gray-600 hover:text-gray-400">
                 <XIcon className="h-6 w-6" />
               </button>
             </div>
             <div className="flex items-center">
-              <img className="flex-none w-32 h-32 rounded-full mr-8" alt={user.displayName} src={user.photoURL}/>
-
               <div className="flex flex-col">
                 <span className="text-gray-700">Booking for</span>
-                <span>Name: {user.displayName}</span>
-                <span>Email: {user.email}</span> 
+                <span>Name: {selectedTimeslot.name ?? user.displayName}</span>
                 <span>On: {getDate()}</span> 
               </div>
             </div>
@@ -68,15 +78,19 @@ function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, o
           <div className="py-3">
             <TimePicker label="End Time" value={endTime} onChange={setEndTime} />
           </div>
-          <button 
-            onClick={handleOnSubmit}
-            className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
-          >Submit</button>
-          {editingBooking && (
-            <button 
-            onClick={handleOnDelete}
-            className="p-3 mt-4 text-white rounded font-semibold bg-red-500 hover:bg-red-400"
-          >Delete</button>
+            {(editingBooking && (user.uid !== selectedTimeslot.userId)) ? null : (
+              <button 
+                onClick={handleOnSubmit}
+                className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
+              >
+                Submit
+              </button>
+            )}
+            {editingBooking && user.uid === selectedTimeslot.userId && (
+              <button 
+              onClick={handleOnDelete}
+              className="p-3 mt-4 text-white rounded font-semibold bg-red-500 hover:bg-red-400"
+            >Delete</button>
           )}
         </form>
       </div>

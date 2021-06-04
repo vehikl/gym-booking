@@ -26,7 +26,13 @@ function Day({ className, day, onAddBooking, bookings, selectedMonth }) {
                     <PlusIcon className="h-6 w-6" />
                 </button>
             </div>
-            { bookings.map((booking, index) =>  <Timeslot key={index} booking={booking} onClick={() => onAddBooking({editing: true, id: booking.id})}/>) }
+            { bookings.map((booking, index) =>  (
+                <Timeslot
+                    key={index}
+                    booking={booking}
+                    onClick={() => onAddBooking({ editing: true, booking })}
+                />
+            )) }
         </div>
     );
 }
