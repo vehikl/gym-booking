@@ -14,6 +14,12 @@ function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, o
     return date.format('MMMM D, YYYY');
   }
 
+  const handleOnEdit = (e) => {
+    e.preventDefault();
+    
+    console.log('Editing');
+  }
+
   const handleOnSubmit = (e) => {
     e.preventDefault()
     
@@ -36,6 +42,8 @@ function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, o
     onDelete()
   }
 
+  const editing = editingBooking && user.uid === selectedTimeslot.userId
+  
   const heading = () => {
     console.log('userId', user.uid)
     console.log('selectedTimeslot.userId', selectedTimeslot.userId)
@@ -78,14 +86,26 @@ function AddBooking({ visible, date, onSubmit, onCancel, user, editingBooking, o
           <div className="py-3">
             <TimePicker label="End Time" value={endTime} onChange={setEndTime} />
           </div>
-            {(editingBooking && (user.uid !== selectedTimeslot.userId)) ? null : (
+
+
+            {(editingBooking && (user.uid !== selectedTimeslot.userId)) && null}
+
+            {editingBooking && (user.uid === selectedTimeslot.userId) &&
+                <button 
+                  onClick={handleOnEdit}
+                  className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
+                >
+                  Edit  123
+                </button>
+            }
+            {!editingBooking && 
               <button 
-                onClick={handleOnSubmit}
+                onClick={handleOnEdit}
                 className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
               >
-                Submit
+                Add booking
               </button>
-            )}
+            }
             {editingBooking && user.uid === selectedTimeslot.userId && (
               <button 
               onClick={handleOnDelete}
