@@ -73,6 +73,7 @@ function App({ db }) {
         name,
         startTime,
         endTime,
+        userId: user.uid,
       });
       setSelectedTimeslot({});
       setShowModal(false);
@@ -119,13 +120,19 @@ function App({ db }) {
       <div className="month flex flex-col items-center justify-center h-full">
         <h1 className="mt-4">{selectedMonth.format("MMMM YYYY")}</h1>
         <div className="flex flex-row">
-          <button className="p-3" onClick={subtractMonth}>
+          <button
+            className="m-1 p-3 rounded bg-gray-200"
+            onClick={subtractMonth}
+          >
             Previous month
           </button>
-          <button className="p-3" onClick={goToCurrentMonth}>
+          <button
+            className="m-1 p-3 rounded bg-gray-200"
+            onClick={goToCurrentMonth}
+          >
             Now
           </button>
-          <button className="p-3" onClick={addMonth}>
+          <button className="m-1 p-3 rounded bg-gray-200" onClick={addMonth}>
             Next month
           </button>
         </div>
