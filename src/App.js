@@ -1,5 +1,6 @@
 import Day from "./Components/Day";
 import AddBooking from "./Components/AddBooking";
+import PasswordScreen from "./Components/PasswordScreen";
 import dayjs from "dayjs";
 import { useState, useEffect, useMemo } from "react";
 import SignIn from "./Components/SignIn";
@@ -185,6 +186,7 @@ function App({ db }) {
           }}
         />
       )}
+      {true && <PasswordScreen />}
       <ToastContainer />
     </>
   );
