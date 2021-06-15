@@ -186,6 +186,7 @@ function App({ db }) {
           }}
         />
       )}
+      {/* check for hash or save HTML password in input (autocomplete) */}
       {true && <PasswordScreen />}
       <ToastContainer />
     </>
