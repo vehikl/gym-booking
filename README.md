@@ -6,3 +6,7 @@ deploy the app:
 deploy a function:
 
 - firebase deploy --only functions
+
+live app:
+
+- https://gym-booking-ef593.web.app/
