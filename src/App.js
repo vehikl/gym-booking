@@ -39,7 +39,6 @@ function App({ db }) {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
-      console.log({ user });
     });
   }, []);
 
@@ -58,6 +57,7 @@ function App({ db }) {
         startTime,
         endTime,
         userId: user.uid,
+        password: localStorage.getItem("password"),
       });
       setShowModal(false);
       setSelectedTimeslot({});
@@ -67,15 +67,18 @@ function App({ db }) {
 
   const handleEdit = (setShowModal, db, selectedMonth, selectedDay) => {
     return ({ name, startTime, endTime }) => {
-      db.collection("booking").doc(selectedTimeslot.id).set({
-        year: selectedMonth.year(),
-        month: selectedMonth.month(),
-        day: selectedDay,
-        name,
-        startTime,
-        endTime,
-        userId: user.uid,
-      });
+      db.collection("booking")
+        .doc(selectedTimeslot.id)
+        .set({
+          year: selectedMonth.year(),
+          month: selectedMonth.month(),
+          day: selectedDay,
+          name,
+          startTime,
+          endTime,
+          userId: user.uid,
+          password: localStorage.getItem("password"),
+        });
       setSelectedTimeslot({});
       setShowModal(false);
       setEditingBooking(false);
@@ -109,6 +112,8 @@ function App({ db }) {
   const startDay = parseInt(selectedMonth.startOf("month").format("d")) + 1;
 
   if (!user) return <SignIn />;
+
+  if (!localStorage.getItem("password")) return <PasswordScreen />;
 
   return (
     <>
@@ -186,8 +191,6 @@ function App({ db }) {
           }}
         />
       )}
-      {/* check for hash or save HTML password in input (autocomplete) */}
-      {true && <PasswordScreen />}
       <ToastContainer />
     </>
   );

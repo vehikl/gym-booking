@@ -21,10 +21,6 @@ function PasswordScreen() {
     } catch (e) {
       toast.error("Incorrect Password");
     }
-
-    // submit to firestore funciton, check if password is correct
-    // if correct, store locally
-    // if incorrect, error toast: 'incorrect password'
   };
 
   return visible ? (
@@ -41,7 +37,7 @@ function PasswordScreen() {
         />
 
         <button
-          className="p-4 rounded border border-gray-400"
+          className="mt-4 py-2 px-4 rounded border border-gray-400"
           onClick={submitPassword}
         >
           Enter
