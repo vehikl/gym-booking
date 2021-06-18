@@ -1,12 +1,12 @@
-import 'firebaseui/dist/firebaseui.css'
+import 'firebaseui/dist/firebaseui.css';
 
 function SignIn() {
-  return ( 
+  return (
     <div className="h-screen w-screen items-center justify-center flex">
-      <div id="firebaseui-auth-container"></div>
+      <div id="firebaseui-auth-container" />
       <div id="loader">Loading...</div>
     </div>
-  )
+  );
 }
 
-export default SignIn
+export default SignIn;

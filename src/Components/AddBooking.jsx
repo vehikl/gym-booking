@@ -1,12 +1,12 @@
-import { useState } from "react";
-import TimePicker from "./TimePicker";
-import { XIcon } from "@heroicons/react/solid";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import { XIcon } from '@heroicons/react/solid';
+import { toast } from 'react-toastify';
+import TimePicker from './TimePicker';
 
 const defaultTime = {
-  hour: "1",
-  minute: "0",
-  period: "AM",
+  hour: '1',
+  minute: '0',
+  period: 'AM',
 };
 
 function AddBooking({
@@ -21,23 +21,19 @@ function AddBooking({
   selectedTimeslot,
 }) {
   const [startTime, setStartTime] = useState(
-    selectedTimeslot.startTime ? selectedTimeslot.startTime : defaultTime
+    selectedTimeslot.startTime ? selectedTimeslot.startTime : defaultTime,
   );
 
   const [endTime, setEndTime] = useState(
-    selectedTimeslot.endTime ? selectedTimeslot.endTime : defaultTime
+    selectedTimeslot.endTime ? selectedTimeslot.endTime : defaultTime,
   );
 
-  document.querySelector("body").style.overflow = visible ? "hidden" : "auto";
+  document.querySelector('body').style.overflow = visible ? 'hidden' : 'auto';
 
-  const getDate = () => {
-    return date.format("MMMM D, YYYY");
-  };
+  const getDate = () => date.format('MMMM D, YYYY');
 
   const handleOnEdit = (e) => {
     e.preventDefault();
-
-    console.log("Editing");
 
     const startHour = parseInt(startTime.hour);
     const endHour = parseInt(endTime.hour);
@@ -46,19 +42,19 @@ function AddBooking({
       0,
       0,
       0,
-      startTime.period === "AM" ? startHour : startHour + 12,
-      parseInt(startTime.minute)
+      startTime.period === 'AM' ? startHour : startHour + 12,
+      parseInt(startTime.minute),
     );
     const endValue = new Date(
       0,
       0,
       0,
-      endTime.period === "AM" ? endHour : endHour + 12,
-      parseInt(endTime.minute)
+      endTime.period === 'AM' ? endHour : endHour + 12,
+      parseInt(endTime.minute),
     );
 
     if (startValue > endValue) {
-      toast.error("Start time cannot be after end time");
+      toast.error('Start time cannot be after end time');
       return;
     }
 
@@ -76,19 +72,19 @@ function AddBooking({
       0,
       0,
       0,
-      startTime.period === "AM" ? startHour : startHour + 12,
-      parseInt(startTime.minute)
+      startTime.period === 'AM' ? startHour : startHour + 12,
+      parseInt(startTime.minute),
     );
     const endValue = new Date(
       0,
       0,
       0,
-      endTime.period === "AM" ? endHour : endHour + 12,
-      parseInt(endTime.minute)
+      endTime.period === 'AM' ? endHour : endHour + 12,
+      parseInt(endTime.minute),
     );
 
     if (startValue > endValue) {
-      toast.error("Start time cannot be after end time");
+      toast.error('Start time cannot be after end time');
       return;
     }
 
@@ -101,17 +97,13 @@ function AddBooking({
   };
 
   const heading = () => {
-    console.log("userId", user.uid);
-    console.log("selectedTimeslot.userId", selectedTimeslot.userId);
-    console.log(editingBooking);
-
     if (editingBooking) {
       if (user.uid === selectedTimeslot.userId) {
-        return "Edit booking";
+        return 'Edit booking';
       }
-      return "Booking";
+      return 'Booking';
     }
-    return "Add booking";
+    return 'Add booking';
   };
 
   return visible ? (
@@ -122,6 +114,7 @@ function AddBooking({
             <div className="flex items-center justify-between mb-6">
               <h1 className="font-bold text-gray-800 text-lg">{heading()}</h1>
               <button
+                type="button"
                 onClick={onCancel}
                 className="text-sm text-gray-600 hover:text-gray-400"
               >
@@ -131,8 +124,16 @@ function AddBooking({
             <div className="flex items-center">
               <div className="flex flex-col">
                 <span className="text-gray-700">Booking for</span>
-                <span>Name: {selectedTimeslot.name ?? user.displayName}</span>
-                <span>On: {getDate()}</span>
+                <span>
+                  Name:
+                  {' '}
+                  {selectedTimeslot.name ?? user.displayName}
+                </span>
+                <span>
+                  On:
+                  {' '}
+                  {getDate()}
+                </span>
               </div>
             </div>
           </div>
@@ -158,6 +159,7 @@ function AddBooking({
 
           {editingBooking && user.uid === selectedTimeslot.userId && (
             <button
+              type="button"
               onClick={handleOnEdit}
               className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
             >
@@ -166,6 +168,7 @@ function AddBooking({
           )}
           {!editingBooking && (
             <button
+              type="button"
               onClick={handleOnSubmit}
               className="p-3 mt-4 text-white rounded font-semibold bg-green-500 hover:bg-green-400"
             >
@@ -174,6 +177,7 @@ function AddBooking({
           )}
           {editingBooking && user.uid === selectedTimeslot.userId && (
             <button
+              type="button"
               onClick={handleOnDelete}
               className="p-3 mt-4 text-white rounded font-semibold bg-red-500 hover:bg-red-400"
             >

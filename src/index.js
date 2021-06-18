@@ -21,7 +21,7 @@ const db = firebase.firestore(app); // TODO: db is stale? :(
 
 const uiConfig = {
   callbacks: {
-    signInSuccessWithAuthResult(authResult, redirectUrl) {
+    signInSuccessWithAuthResult() {
       // User successfully signed in.
       // Return type determines whether we continue the redirect automatically
       // or whether we leave that to developer to handle.

@@ -3,12 +3,12 @@ import {
   useState, useEffect, useMemo, useReducer,
 } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import firebase from 'firebase';
 import Day from './Components/Day';
 import AddBooking from './Components/AddBooking';
 import PasswordScreen from './Components/PasswordScreen';
 import SignIn from './Components/SignIn';
 import 'react-toastify/dist/ReactToastify.css';
-import firebase from 'firebase';
 import 'firebase/functions';
 
 function App({ db }) {
@@ -39,8 +39,8 @@ function App({ db }) {
   }, [monthOffset]);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setUser(user);
+    firebase.auth().onAuthStateChanged((loggedInUser) => {
+      setUser(loggedInUser);
     });
   }, []);
 
@@ -61,7 +61,6 @@ function App({ db }) {
       localStorage.setItem('password', result.data);
       forceUpdate();
     } catch (e) {
-      console.log('incorrect');
       toast.error('Incorrect Password');
     }
   };
@@ -133,7 +132,7 @@ function App({ db }) {
       {!localStorage.getItem('password') && <PasswordScreen submitPassword={submitPassword} />}
       <div className="fixed right-0 top-0 mr-8 mt-2">
         <span className="text-gray-500">{user.displayName}</span>
-        <button className="ml-2 py-1 px-2 border" onClick={logout}>
+        <button type="button" className="ml-2 py-1 px-2 border" onClick={logout}>
           Logout
         </button>
       </div>
@@ -141,18 +140,20 @@ function App({ db }) {
         <h1 className="mt-4">{selectedMonth.format('MMMM YYYY')}</h1>
         <div className="flex flex-row">
           <button
+            type="button"
             className="m-1 p-3 rounded bg-gray-200"
             onClick={subtractMonth}
           >
             Previous month
           </button>
           <button
+            type="button"
             className="m-1 p-3 rounded bg-gray-200"
             onClick={goToCurrentMonth}
           >
             Now
           </button>
-          <button className="m-1 p-3 rounded bg-gray-200" onClick={addMonth}>
+          <button type="button" className="m-1 p-3 rounded bg-gray-200" onClick={addMonth}>
             Next month
           </button>
         </div>
@@ -174,7 +175,6 @@ function App({ db }) {
                 (booking) => booking.day === day,
               )}
               onAddBooking={({ editing, booking }) => {
-                console.log(booking);
                 setShowModal(true);
                 setSelectedDay(day);
                 if (editing) {
