@@ -36,7 +36,7 @@ function App({ db }) {
           })),
         );
       });
-  }, []);
+  }, [monthOffset]);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
