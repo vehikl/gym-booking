@@ -28,8 +28,6 @@ function AddBooking({
     selectedTimeslot.endTime ? selectedTimeslot.endTime : defaultTime,
   );
 
-  document.querySelector('body').style.overflow = visible ? 'hidden' : 'auto';
-
   const getDate = () => date.format('MMMM D, YYYY');
 
   const handleOnEdit = (e) => {
@@ -107,7 +105,7 @@ function AddBooking({
   };
 
   return visible ? (
-    <div className="h-screen w-screen absolute bg-gray-200 bg-opacity-40 inset-0 flex justify-center items-center">
+    <div className="h-screen w-screen fixed bg-gray-200 bg-opacity-40 inset-0 flex justify-center items-center">
       <div className="bg-white rounded shadow p-5 flex flex-col w-2/3 max-w-md">
         <div className="flex flex-row items-center justify-between mb-4">
           <div className="flex flex-col w-full">

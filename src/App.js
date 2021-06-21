@@ -39,6 +39,10 @@ function App({ db }) {
   }, [monthOffset]);
 
   useEffect(() => {
+    document.querySelector('body').style.overflow = showModal ? 'hidden' : 'auto';
+  }, [showModal]);
+
+  useEffect(() => {
     firebase.auth().onAuthStateChanged((loggedInUser) => {
       setUser(loggedInUser);
     });
