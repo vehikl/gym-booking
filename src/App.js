@@ -134,8 +134,8 @@ function App({ db }) {
   return (
     <>
       {!localStorage.getItem('password') && <PasswordScreen submitPassword={submitPassword} />}
-      <div className="fixed right-0 top-0 mr-8 mt-2">
-        <span className="text-gray-500">{user.displayName}</span>
+      <div className="flex items-center justify-between m-2">
+        <span className="text-gray-500 pl-2">{user.displayName}</span>
         <button type="button" className="ml-2 py-1 px-2 border" onClick={logout}>
           Logout
         </button>
