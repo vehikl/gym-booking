@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { toast } from 'react-toastify';
 import TimePicker from './TimePicker';
@@ -27,6 +27,19 @@ function AddBooking({
   const [endTime, setEndTime] = useState(
     selectedTimeslot.endTime ? selectedTimeslot.endTime : defaultTime,
   );
+
+  const onClose = (event) => {
+    if (event.which === 27 || event.keyCode === 27) {
+      onCancel();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', onClose);
+    return () => {
+      window.removeEventListener('keydown', onClose);
+    };
+  }, []);
 
   const getDate = () => date.format('MMMM D, YYYY');
 
