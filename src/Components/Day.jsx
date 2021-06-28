@@ -3,7 +3,8 @@ import { PlusIcon } from '@heroicons/react/solid';
 import dayjs from 'dayjs';
 
 function Timeslot({ booking, onClick }) {
-  const minute = booking.startTime.minute.padStart(2, '0');
+  const startMinute = booking.startTime.minute.padStart(2, '0');
+  const endMinute = booking.endTime.minute.padStart(2, '0');
 
   return (
     // eslint-disable-next-line
@@ -14,11 +15,11 @@ function Timeslot({ booking, onClick }) {
     >
       <span className="w-2 h-2 bg-green-600 rounded-full flex-shrink-0 mr-2" />
       <span className="">
-        {booking.startTime.hour}:{minute}
+        {booking.startTime.hour}:{startMinute}
         <span>&nbsp;-&nbsp;</span>
       </span>
       <span className="">
-        {booking.endTime.hour}:{minute} {booking.endTime.period}
+        {booking.endTime.hour}:{endMinute} {booking.endTime.period}
       </span>
       <span className="mx-1" />
       <span className="">{booking.name}</span>
