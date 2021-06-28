@@ -1,8 +1,8 @@
 import range from 'lodash/range';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
-const HOUR_OPTIONS = range(1, 13);
-const MINUTE_OPTIONS = [0, 15, 30, 45];
+const HOUR_OPTIONS = range(1, 13).map((hour) => hour.toString().padStart(2, '0'));
+const MINUTE_OPTIONS = ['00', '15', '30', '45'];
 const PERIODS = ['AM', 'PM'];
 
 const TimePicker = ({
