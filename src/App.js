@@ -79,6 +79,7 @@ function App({ db }) {
       endTime,
       userId: user.uid,
       password: localStorage.getItem('password'),
+      email: user.email,
     });
     setShowModal(false);
     setSelectedTimeslot({});
@@ -97,6 +98,7 @@ function App({ db }) {
         endTime,
         userId: user.uid,
         password: localStorage.getItem('password'),
+        email: user.email,
       });
     setSelectedTimeslot({});
     setShowModal(false);
