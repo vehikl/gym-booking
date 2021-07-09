@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 
 function SignIn() {
   const onMessage = (e) => {
-    if (e.origin !== window.origin) {
-      return;
+    console.log('E: ', e);
+    console.log('WINDPW: ', window.origin);
+    if (e.origin === process.env.REACT_APP_API_BASE_URL) {
+      console.log('YO');
     }
 
-    console.log(e);
-    console.log('TOKEN: ', e.data.token);
-    console.log('NAME:', e.data.name);
+    // console.log(e);
+    // console.log('TOKEN: ', e.data.token);
+    // console.log('NAME:', e.data.name);
     // localStorage.setItem('user',e.data.name)
     // localStorage.setItem('jwt',e.data.token)
   };
@@ -21,7 +23,7 @@ function SignIn() {
   }, []);
 
   const handleOnClick = () => {
-    window.open(`${process.env.REACT_APP_API_BASE_URL}/login/google/`);
+    window.open(`${process.env.REACT_APP_API_BASE_URL}/login/google/`, 'message');
   };
 
   return (
