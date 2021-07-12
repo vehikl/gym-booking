@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {
-  useState, useEffect, useMemo, useReducer,
+  useState, useEffect, useMemo,
 } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import firebase from 'firebase';
@@ -10,6 +10,7 @@ import PasswordScreen from './Components/PasswordScreen';
 import SignIn from './Components/SignIn';
 import 'react-toastify/dist/ReactToastify.css';
 import 'firebase/functions';
+import apiClient from './apiClient';
 
 function App({ db }) {
   const [monthOffset, setMonthOffset] = useState(0);
@@ -17,9 +18,10 @@ function App({ db }) {
   const [showModal, setShowModal] = useState(false);
   const [editingBooking, setEditingBooking] = useState(false);
   const [bookingsForMonth, setBookingsForMonth] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user] = useState(localStorage.getItem('user'));
+
   const [selectedTimeslot, setSelectedTimeslot] = useState({});
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  // const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const selectedMonth = useMemo(
     () => dayjs().add(monthOffset, 'M'),
     [monthOffset],
@@ -42,12 +44,6 @@ function App({ db }) {
     document.querySelector('body').style.overflow = showModal ? 'hidden' : 'auto';
   }, [showModal]);
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((loggedInUser) => {
-      setUser(loggedInUser);
-    });
-  }, []);
-
   const logout = async () => {
     await firebase.auth().signOut();
     window.location.reload();
@@ -59,13 +55,15 @@ function App({ db }) {
       return;
     }
 
-    const submit = firebase.functions().httpsCallable('submitPassword');
     try {
-      const result = await submit({ password });
-      localStorage.setItem('password', result.data);
-      forceUpdate();
-    } catch (e) {
-      toast.error('Incorrect Password');
+      const response = await apiClient.post('/setPassword', {
+        password,
+      });
+      apiClient.defaults.headers.common.Password = password;
+      console.log(response);
+    } catch (error) {
+      toast.error('Please enter the correct password');
+      console.log(error);
     }
   };
 

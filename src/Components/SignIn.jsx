@@ -1,18 +1,15 @@
 import { useEffect } from 'react';
+import apiClient from '../apiClient';
 
 function SignIn() {
-  const onMessage = (e) => {
-    console.log('E: ', e);
-    console.log('WINDPW: ', window.origin);
-    if (e.origin === process.env.REACT_APP_API_BASE_URL) {
-      console.log('YO');
+  const onMessage = (message) => {
+    if (`${message.origin}/api` !== process.env.REACT_APP_API_BASE_URL) {
+      return;
     }
 
-    // console.log(e);
-    // console.log('TOKEN: ', e.data.token);
-    // console.log('NAME:', e.data.name);
-    // localStorage.setItem('user',e.data.name)
-    // localStorage.setItem('jwt',e.data.token)
+    localStorage.setItem('user', message.data.name);
+    localStorage.setItem('jwt', message.data.token);
+    apiClient.defaults.headers.common.Authorization = `Bearer ${message.data.token}`;
   };
 
   useEffect(() => {
