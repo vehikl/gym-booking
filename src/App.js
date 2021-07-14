@@ -56,6 +56,7 @@ function App({ db }) {
     }
 
     try {
+      apiClient.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('jwt')}`;
       const response = await apiClient.post('/setPassword', {
         password,
       });
