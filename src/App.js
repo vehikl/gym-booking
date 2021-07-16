@@ -3,7 +3,6 @@ import {
   useState, useEffect, useMemo,
 } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import firebase from 'firebase';
 import Day from './Components/Day';
 import AddBooking from './Components/AddBooking';
 import PasswordScreen from './Components/PasswordScreen';
@@ -18,7 +17,8 @@ function App({ db }) {
   const [showModal, setShowModal] = useState(false);
   const [editingBooking, setEditingBooking] = useState(false);
   const [bookingsForMonth, setBookingsForMonth] = useState([]);
-  const [user] = useState(localStorage.getItem('user'));
+  const [user, setUser] = useState(localStorage.getItem('jwt'));
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const [selectedTimeslot, setSelectedTimeslot] = useState({});
   // const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -26,6 +26,17 @@ function App({ db }) {
     () => dayjs().add(monthOffset, 'M'),
     [monthOffset],
   );
+
+  useEffect(() => {
+    const updateLocalStorage = () => {
+      console.log('HITITIT');
+      setUser(localStorage.getItem('jwt'));
+    };
+    window.addEventListener('yoUpdateStorageFam', updateLocalStorage);
+    return () => {
+      window.removeEventListener('yoUpdateStorageFam', updateLocalStorage);
+    };
+  }, []);
 
   useEffect(() => {
     db.collection('booking')
@@ -45,8 +56,9 @@ function App({ db }) {
   }, [showModal]);
 
   const logout = async () => {
-    await firebase.auth().signOut();
-    window.location.reload();
+    localStorage.clear();
+    setToken(null);
+    setUser(null);
   };
 
   const submitPassword = async (password) => {
@@ -61,6 +73,8 @@ function App({ db }) {
         password,
       });
       apiClient.defaults.headers.common.Password = password;
+      localStorage.setItem('token', response.data.token);
+      setToken(response.data.token);
       console.log(response);
     } catch (error) {
       toast.error('Please enter the correct password');
@@ -134,7 +148,7 @@ function App({ db }) {
 
   return (
     <>
-      {!localStorage.getItem('password') && <PasswordScreen submitPassword={submitPassword} />}
+      {!token && <PasswordScreen submitPassword={submitPassword} />}
       <div className="flex items-center justify-between m-2">
         <span className="text-gray-500 pl-2">{user.displayName}</span>
         <button type="button" className="ml-2 py-1 px-2 border" onClick={logout}>

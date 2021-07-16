@@ -10,6 +10,7 @@ function SignIn() {
     localStorage.setItem('user', message.data.name);
     localStorage.setItem('jwt', message.data.token);
     apiClient.defaults.headers.common.Authorization = `Bearer ${message.data.token}`;
+    window.dispatchEvent(new Event('yoUpdateStorageFam'));
   };
 
   useEffect(() => {
