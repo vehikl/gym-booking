@@ -75,25 +75,31 @@ function App({ db }) {
       apiClient.defaults.headers.common.Password = password;
       localStorage.setItem('token', response.data.token);
       setToken(response.data.token);
-      console.log(response);
+      apiClient.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
     } catch (error) {
       toast.error('Please enter the correct password');
-      console.log(error);
     }
   };
 
-  const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => ({ name, startTime, endTime }) => {
-    db.collection('booking').add({
-      year: selectedMonth.year(),
-      month: selectedMonth.month(),
-      day: selectedDay,
-      name,
-      startTime,
-      endTime,
-      userId: user.uid,
-      password: localStorage.getItem('password'),
-      email: user.email,
-    });
+  // const handleSubmit = (setShowModal, db, selectedMonth, selectedDay) => ({ name, startTime, endTime }) => {
+  //   db.collection('booking').add({
+  //     year: selectedMonth.year(),
+  //     month: selectedMonth.month(),
+  //     day: selectedDay,
+  //     name,
+  //     startTime,
+  //     endTime,
+  //     userId: user.uid,
+  //     password: localStorage.getItem('password'),
+  //     email: user.email,
+  //   });
+  //   setShowModal(false);
+  //   setSelectedTimeslot({});
+  //   setEditingBooking(false);
+  // };
+
+  const handleSubmit = () => {
+    apiClient.post('https://www.google.com');
     setShowModal(false);
     setSelectedTimeslot({});
     setEditingBooking(false);
@@ -212,7 +218,7 @@ function App({ db }) {
           selectedTimeslot={selectedTimeslot}
           date={selectedMonth.date(selectedDay)}
           user={user}
-          onSubmit={handleSubmit(setShowModal, db, selectedMonth, selectedDay)}
+          onSubmit={handleSubmit}
           onEdit={handleEdit(setShowModal, db, selectedMonth, selectedDay)}
           onDelete={() => handleDelete()}
           onCancel={() => {
