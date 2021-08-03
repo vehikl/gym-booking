@@ -28,6 +28,8 @@ function App({ db }) {
   );
 
   useEffect(() => {
+    apiClient.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`;
+
     const updateLocalStorage = () => {
       console.log('HITITIT');
       setUser(localStorage.getItem('jwt'));
@@ -99,7 +101,7 @@ function App({ db }) {
   // };
 
   const handleSubmit = () => {
-    apiClient.post('https://www.google.com');
+    apiClient.post('/test');
     setShowModal(false);
     setSelectedTimeslot({});
     setEditingBooking(false);
